@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import * as S from './style'
-const Home = () => {
+const information = () => {
     return (
         <div css={S.homecontainer}>
-           🏠
+           ℹ️
         </div>
 
     )
 }
-export default Home;
+export default information;

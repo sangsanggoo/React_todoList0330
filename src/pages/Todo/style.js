@@ -65,6 +65,15 @@ export const mainContainer = css`
     height: 100%;
     
 `
+export const home = css`
+    margin: 10px auto;
+    width: 550px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 450px;
+`
 export const mainHeader = css`
     display: flex;
     justify-content: center;

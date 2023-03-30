@@ -8,27 +8,27 @@ const Todo = () => {
         content : '',
         clear : false
     };
-    const [hiddenMenuShow, SetHiddenMenuShow] = useState(true);
+    const[hiddenMenuShow, SetHiddenMenuShow] = useState(true);
+    const[todoList,setTodoList] = useState([]);
+    const[modifytodo,setModifyTodo] =useState(todo);
+    const[inputs,setInputs] = useState(todo);
+    const[modalOpen,setModalOpen] = useState(false);
+    const[menu,setMenu] =useState(1);
     const mainSideRef = useRef();
+    const todoIndex = useRef(1);
+    const inputRef = useRef();
+    const sidebuttonRef = useRef();
+
     const buttonClick = (e) => {
         if(e === false) {
             mainSideRef.current.style.left = '-250px';
             SetHiddenMenuShow(true);
-            console.log(e);
         } else {
             mainSideRef.current.style.left = '0px';
             SetHiddenMenuShow(false);
-            console.log(e);
         }
     }
-
-    const todoIndex = useRef(1);
-    const[todoList,setTodoList] = useState([]);
-    const[modifytodo,setModifyTodo] =useState(todo);
-    const[inputs,setInputs] = useState(todo);
-    const inputRef = useRef();
-    const sidebuttonRef = useRef();
-    const[modalOpen,setModalOpen] = useState(false);
+    
     const inputHandler = (e) => {
         const {name, value} = e.target;
         setInputs({...inputs, [name] : value});
@@ -57,7 +57,11 @@ const Todo = () => {
     const onClear = (e) => {
         setTodoList(todoList.map(todo => {
             if(todo.id === e) {
-                todo.clear=true;
+                if(todo.clear === true){
+                    todo.clear = false;
+                } else {
+                    todo.clear = true;
+                }
             } 
             return todo;
         }))
@@ -67,7 +71,7 @@ const Todo = () => {
     const onModifybutton = (e) => {
         setModalOpen(true);
         setModifyTodo(e);
-  
+        
 
     }
     const modifyTodoCheck = (e) => {
@@ -80,11 +84,19 @@ const Todo = () => {
         setModalOpen(false);
 
     }
+    const menuChange = (e) => {
+        setMenu(e);
+    }
     return (
         <>
         <div css={S.container}>
-            
-            <main css={S.mainContainer}>
+            {!menu ?
+            <main css={S.home}>
+            <div>
+                ℹ️
+            </div>
+            </main>  :
+                <main css={S.mainContainer}>
                 <header css={S.mainHeader}>
                     <h1 css={S.mainTitle}>ToDo</h1>
                         <div css={S.todoInputContainer}>
@@ -114,7 +126,7 @@ const Todo = () => {
                                     </div> 
                                     }
                                     <div css ={S.todoContentFooter}>
-                                        <button css={S.todoButton} onClick = {() => onClear(todo.id)}>완료</button>
+                                        <button css={S.todoButton} onClick = {() => onClear(todo.id)}>{todo.clear ? '취소' : '완료'}</button>
                                         <button css={S.todoButton} onClick = {() => onModifybutton(todo)}>수정</button>
                                         <button css={S.todoButton} onClick = {() => onRemove(todo.id)}>삭제</button>
                                     </div>
@@ -127,12 +139,17 @@ const Todo = () => {
                 </header>
              
             </main>
+            }
+            
+            
+
+            
 
                 <div css ={S.mainSide} ref={mainSideRef}>
-                    <div css = {S.mainSideMenu}>
+                    <div css = {S.mainSideMenu} onClick = {() => menuChange(0)}>
                         Information
                     </div>
-                    <div css = {S.mainSideMenu}>
+                    <div css = {S.mainSideMenu} onClick = {() => menuChange(1)}>
                         ToDo
                     </div>
                     <button css= {S.hiddenButton} onClick ={() => buttonClick(hiddenMenuShow)} ref={sidebuttonRef} >
